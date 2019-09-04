@@ -1,13 +1,13 @@
 #!/bin/bash
 
-# BASEHOSTNAME=$(echo $HOSTNAME | sed "s|\([^\.]*\)\.cern\.ch|\1|" | sed "s|\([^\.]*\)\.fnal\.gov|\1|")
-# if [[ "${BASEHOSTNAME}" =~ ^lxplus[0-9]{3,4}$ ]]; then
-#     echo "Not implemented yet for lxplus!"
-#     exit 1
-# fi
-# export X509_USER_PROXY=${HOME}/private/x509up_u$(id -u)
+BASEHOSTNAME=$(echo $HOSTNAME | sed "s|\([^\.]*\)\.cern\.ch|\1|" | sed "s|\([^\.]*\)\.fnal\.gov|\1|")
+if [[ "${BASEHOSTNAME}" =~ ^lxplus[0-9]{3,4}$ ]]; then
+    echo "Not implemented yet for lxplus!"
+    exit 1
+fi
+export X509_USER_PROXY=${HOME}/private/x509up_u$(id -u)
+source ${HOME}/.fnal_bashrc
 
-source ~/.bashrc
 CFGFILESSOURCE="/uscms/home/tmudholk/private/stealth/stealthMC/production_configs"
 
 CMSSWSOURCE=""
@@ -21,7 +21,7 @@ case "${1}" in
 	    1)
 		echo "Step: 1"
 		CMSSWCFGFILE="SUS-RunIIFall17FSPremix-00069_1_cfg.py"
-		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=5000 JobType.maxMemoryMB=2500 Data.totalUnits=500e3 Data.unitsPerJob=5000"
+		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=1000 JobType.maxMemoryMB=2800 Data.totalUnits=150e3 Data.unitsPerJob=1000"
 		CRABCONFIGFILE="mc_crabConfig_generation.py"
 		;;
 	    2)
@@ -30,7 +30,7 @@ case "${1}" in
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
-		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/crab_job_${1}_step1" | grep -v "failed" | grep "*.root" | sed "s|/store/|${EOSPREFIX}/store/|" | tee inputFilesList_${1}_step${2}.txt
+		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/SMS-T5WgStealth_PrivateProduction_13TeV-madgraphMLM-pythia8/crab_job_${1}_step1" | tee inputFilesList_raw_${1}_step${2}.txt && cat inputFilesList_raw_${1}_step${2}.txt | grep -v "failed" | grep ".root" | sed "s|/store/|${EOSPREFIX}/store/|" > inputFilesList_${1}_step${2}.txt && rm inputFilesList_raw_${1}_step${2}.txt
 		echo "Building CRAB config file..."
 		sed "s|userInputFiles = PLACEHOLDER|userInputFiles = open(\"inputFilesList_${1}_step${2}.txt\").readlines()|" mc_crabConfig_reco.py > ${CRABCONFIGFILE}
 		;;
@@ -46,7 +46,7 @@ case "${1}" in
 	    1)
 		echo "Step: 1"
 		CMSSWCFGFILE="SUS-RunIIFall17wmLHEGS-00069_1_cfg.py"
-		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=1000 Data.totalUnits=500e3 Data.unitsPerJob=1000"
+		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=500 Data.totalUnits=150e3 Data.unitsPerJob=500"
 		CRABCONFIGFILE="mc_crabConfig_generation.py"
 		;;
 	    2)
@@ -55,7 +55,7 @@ case "${1}" in
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
-		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/crab_job_${1}_step1" | grep -v "failed" | grep "*.root" | sed "s|/store/|${EOSPREFIX}/store/|" | tee inputFilesList_${1}_step${2}.txt
+		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/SMS-T5WgStealth_PrivateProduction_13TeV-madgraphMLM-pythia8/crab_job_${1}_step1" | tee inputFilesList_raw_${1}_step${2}.txt && cat inputFilesList_raw_${1}_step${2}.txt | grep -v "failed" | grep ".root" | sed "s|/store/|${EOSPREFIX}/store/|" > inputFilesList_${1}_step${2}.txt && rm inputFilesList_raw_${1}_step${2}.txt
 		echo "Building CRAB config file..."
 		sed "s|userInputFiles = PLACEHOLDER|userInputFiles = open(\"inputFilesList_${1}_step${2}.txt\").readlines()|" mc_crabConfig_reco.py > ${CRABCONFIGFILE}
 		;;
@@ -65,7 +65,7 @@ case "${1}" in
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
-		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/crab_job_${1}_step2" | grep -v "failed" | grep "*.root" | sed "s|/store/|${EOSPREFIX}/store/|" | tee inputFilesList_${1}_step${2}.txt
+		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/SMS-T5WgStealth_PrivateProduction_13TeV-madgraphMLM-pythia8/crab_job_${1}_step2" | tee inputFilesList_raw_${1}_step${2}.txt && cat inputFilesList_raw_${1}_step${2}.txt | grep -v "failed" | grep ".root" | sed "s|/store/|${EOSPREFIX}/store/|" > inputFilesList_${1}_step${2}.txt && rm inputFilesList_raw_${1}_step${2}.txt
 		echo "Building CRAB config file..."
 		sed "s|userInputFiles = PLACEHOLDER|userInputFiles = open(\"inputFilesList_${1}_step${2}.txt\").readlines()|" mc_crabConfig_reco.py > ${CRABCONFIGFILE}
 		;;
@@ -75,7 +75,7 @@ case "${1}" in
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
-		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/crab_job_${1}_step3" | grep -v "failed" | grep "*.root" | sed "s|/store/|${EOSPREFIX}/store/|" | tee inputFilesList_${1}_step${2}.txt
+		rec_eosls "/store/group/lpcsusystealth/privateMCProduction/SMS-T5WgStealth_PrivateProduction_13TeV-madgraphMLM-pythia8/crab_job_${1}_step3" | tee inputFilesList_raw_${1}_step${2}.txt && cat inputFilesList_raw_${1}_step${2}.txt | grep -v "failed" | grep ".root" | sed "s|/store/|${EOSPREFIX}/store/|" > inputFilesList_${1}_step${2}.txt && rm inputFilesList_raw_${1}_step${2}.txt
 		echo "Building CRAB config file..."
 		sed "s|userInputFiles = PLACEHOLDER|userInputFiles = open(\"inputFilesList_${1}_step${2}.txt\").readlines()|" mc_crabConfig_reco.py > ${CRABCONFIGFILE}
 		;;
@@ -99,4 +99,4 @@ if [ "${3}" = "prod" ]; then
     DRYRUNFLAG=""
 fi
 
-set -x && echo "crab submit ${DRYRUNFLAG}-c ${CRABCONFIGFILE} ${CRABOPTIONS}" && set +x
+set -x && crab submit ${DRYRUNFLAG}-c ${CRABCONFIGFILE} ${CRABOPTIONS} && set +x
