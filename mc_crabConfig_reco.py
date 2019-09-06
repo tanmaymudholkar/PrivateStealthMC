@@ -4,6 +4,7 @@ config = config()
 config.General.transferLogs = False
 
 config.JobType.pluginName = "ANALYSIS"
+config.JobType.maxMemoryMB = 2800
 
 config.Data.outLFNDirBase = "/store/group/lpcsusystealth/privateMCProduction/"
 config.Data.inputDataset = ""

@@ -9,6 +9,7 @@ export X509_USER_PROXY=${HOME}/private/x509up_u$(id -u)
 source ${HOME}/.fnal_bashrc
 
 CFGFILESSOURCE="/uscms/home/tmudholk/private/stealth/stealthMC/production_configs"
+cd ${CFGFILESSOURCE}
 
 CMSSWSOURCE=""
 CRABOPTIONS=""
@@ -21,7 +22,7 @@ case "${1}" in
 	    1)
 		echo "Step: 1"
 		CMSSWCFGFILE="SUS-RunIIFall17FSPremix-00069_1_cfg.py"
-		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=1000 JobType.maxMemoryMB=2800 Data.totalUnits=150e3 Data.unitsPerJob=1000"
+		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=500 Data.totalUnits=150e3 Data.unitsPerJob=500"
 		CRABCONFIGFILE="mc_crabConfig_generation.py"
 		;;
 	    2)
@@ -46,7 +47,7 @@ case "${1}" in
 	    1)
 		echo "Step: 1"
 		CMSSWCFGFILE="SUS-RunIIFall17wmLHEGS-00069_1_cfg.py"
-		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=500 Data.totalUnits=150e3 Data.unitsPerJob=500"
+		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=100 Data.totalUnits=150e3 Data.unitsPerJob=100"
 		CRABCONFIGFILE="mc_crabConfig_generation.py"
 		;;
 	    2)
