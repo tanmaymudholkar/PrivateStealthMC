@@ -21,13 +21,13 @@ case "${1}" in
 	case "${2}" in
 	    1)
 		echo "Step: 1"
-		CMSSWCFGFILE="SUS-RunIIFall17FSPremix-00069_1_cfg.py"
-		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=500 Data.totalUnits=150e3 Data.unitsPerJob=500"
+		CMSSWCFGFILE="fastsim_step1_cfg.py"
+		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=501 Data.totalUnits=150e3 Data.unitsPerJob=501"
 		CRABCONFIGFILE="mc_crabConfig_generation.py"
 		;;
 	    2)
 		echo "Step: 2"
-		CMSSWCFGFILE="SUS-RunIIFall17MiniAODv2-00332_1_cfg.py"
+		CMSSWCFGFILE="fastsim_step2_cfg.py"
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
@@ -42,17 +42,17 @@ case "${1}" in
 	;;
     fullsim)
 	echo "Submitting crab job for fullsim"
-	CMSSWSOURCE="/uscms/home/tmudholk/private/stealth/stealthMC/CMSSW_9_4_7/src"
+	CMSSWSOURCE="/uscms/home/tmudholk/private/stealth/stealthMC/CMSSW_9_4_12/src"
 	case "${2}" in
 	    1)
 		echo "Step: 1"
-		CMSSWCFGFILE="SUS-RunIIFall17wmLHEGS-00069_1_cfg.py"
-		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=100 Data.totalUnits=150e3 Data.unitsPerJob=100"
+		CMSSWCFGFILE="fullsim_step1_cfg.py"
+		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE} JobType.eventsPerLumi=101 Data.totalUnits=150e3 Data.unitsPerJob=101"
 		CRABCONFIGFILE="mc_crabConfig_generation.py"
 		;;
 	    2)
 		echo "Step: 2"
-		CMSSWCFGFILE="SUS-RunIIFall17DRPremix-00069_1_cfg.py"
+		CMSSWCFGFILE="fullsim_step2_cfg.py"
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
@@ -62,7 +62,7 @@ case "${1}" in
 		;;
 	    3)
 		echo "Step: 3"
-		CMSSWCFGFILE="SUS-RunIIFall17DRPremix-00069_2_cfg.py"
+		CMSSWCFGFILE="fullsim_step3_cfg.py"
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
@@ -72,7 +72,7 @@ case "${1}" in
 		;;
 	    4)
 		echo "Step: 4"
-		CMSSWCFGFILE="SUS-RunIIFall17MiniAODv2-00069_1_cfg.py"
+		CMSSWCFGFILE="fullsim_step4_cfg.py"
 		CRABOPTIONS="General.requestName=job_${1}_step${2} General.workArea=crab_workArea_job_${1}_step${2} JobType.psetName=${CMSSWCFGFILE}"
 		CRABCONFIGFILE="mc_crabConfig_reco_${1}_step${2}.py"
 		echo "Building list of input files..."
@@ -97,7 +97,7 @@ source /cvmfs/cms.cern.ch/crab3/crab.sh
 
 DRYRUNFLAG="--dryrun "
 if [ "${3}" = "prod" ]; then
-    DRYRUNFLAG=""
+    DRYRUNFLAG="--wait "
 fi
 
 set -x && crab submit ${DRYRUNFLAG}-c ${CRABCONFIGFILE} ${CRABOPTIONS} && set +x
